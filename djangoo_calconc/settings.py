@@ -34,6 +34,7 @@ else:
 ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
+    'https://www.calconc-production.up.railway.app',
     'https://calconc-production.up.railway.app'
 ]
 
