@@ -1,0 +1,68 @@
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/listar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>CalConc</title>
+</head>
+<body>
+     {% include "utils/header.html" %}
+
+    <div class="container">
+
+         {% include "utils/sidebar.html" %}
+
+        <div class="content">
+            <div class="cadastrar_btn">
+                <a class="nome-pagina">Traço</a>
+                <a href="{% url 'cadastrar_traco' %}" class="btn_cadastrar">Adicionar Traço</a>
+            </div>
+
+            <div class = 'all-content'>
+                {% with filtro_url='filtrar_tracos' %}
+                    {% include "utils/filtrar.html" %}
+                {% endwith %}
+
+                <div class="lista">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Porcentagem Água</th>
+                                <th>Data de Cadastro</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for elemento in traco %}
+                                <tr>
+                                    <td>{{ elemento.nome }}</td>
+                                    <td>{{ elemento.descricao }}</td>
+                                    <td>{{ elemento.porcentagem_agua }}</td>
+                                    <td>{{ elemento.data_cadastro }}</td>
+                                    <td class="align-right">
+                                      <div class="btn-action-container">
+                                        <a href="{% url 'inspecionar_traco' elemento.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_traco' elemento.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ elemento.id }}" data-url="{% url 'deletar_traco' elemento.id %}"><i class="fa fa-trash"></i></button>
+                                      </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include "utils/paginador.html" %}
+                    {% include "utils/duvidas.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/deletar.js' %}"></script>
+</body>
+{% endblock %}

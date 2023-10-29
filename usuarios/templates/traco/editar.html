@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <link rel="stylesheet" href="{% static 'css/erro.css' %}">
+    <title>CalConc</title>
+</head>
+<h1>Editar Traço: {{ traco.nome }}</h1>
+<form method="post" >
+    {% csrf_token %}
+
+    {% include "utils/error_message.html" %}
+    <div class="form-columns">
+        <div class="form-column">
+            <div class="field">
+                <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+                {{ form.nome }}
+                <ul class="error-message">{{ form.nome.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.descricao.id_for_label }}">Descrição<span class="required-label">*</span></label>
+                {{ form.descricao }}
+                <ul class="error-message">{{ form.descricao.errors }}</ul>
+            </div>
+            <div class="field">
+                <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de agua<span class="required-label">*</span></label>
+                {{ form.porcentagem_agua }}
+                <ul class="error-message">{{ form.porcentagem_agua.errors }}</ul>
+            </div>
+        </div>
+    </div>
+
+
+    <h1>Agregados:</h1>
+    {% for i in informacoes_agregados %}
+        <div class="agregado-container">
+        <h2>{{ i.tipo_agregado }}</h2>
+            <div class="field">
+                <label for="agregados">Agregado:</label>
+                <select name="agregados" id="agregados">
+                    <option selected value="">Nenhum</option>
+                    {% for agregado in i.agregados %}
+                        <option {{ agregado.selected }} value="{{ agregado.id }}">{{ agregado.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="porcentagem_agregados">Porcentagem Agregado:</label>
+                <input type="number" step="0.01"  name="porcentagem_agregados" class="form-control" value="{{ i.porcentagem }}" />
+            </div>
+        </div>
+    {% endfor %}
+
+    {% include "utils/salvar_cancelar_botoes.html" %}
+    {% include "utils/duvidas.html" %}
+    </form>
+    <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function exibirMensagemConfirmacao() {
+            alert("Agregado cadastrado com sucesso!");
+        }
+    </script>
+</form>
+</html>
+{% endblock %}

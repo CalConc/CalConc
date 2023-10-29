@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/cadastros.css' %}">
+    <title>CalConc</title>
+</head>
+<h1>Editar Agregado: {{ agregado.nome }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="field">
+        <label for="{{ form.nome.id_for_label }}">Nome<span class="required-label">*</span></label>
+        {{ form.nome }}
+        <ul class="error-message">{{ form.nome.errors }}</ul>
+    </div>
+
+    {% include "utils/salvar_cancelar_botoes.html" %}
+    {% include "utils/duvidas.html" %}
+    </form>
+    <div id="mensagemSucesso" style="display: none;">Agregado cadastrado com sucesso!</div>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function exibirMensagemConfirmacao() {
+            alert("Agregado cadastrado com sucesso!");
+        }
+    </script>
+</form>
+{% endblock %}

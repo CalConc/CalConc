@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% include "utils/anonymous_user_redirect.html" %}
+
+{% block content %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/listar.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>CalConc</title>
+</head>
+<body>
+     {% include "utils/header.html" %}
+
+    <div class="container">
+
+         {% include "utils/sidebar.html" %}
+
+        <div class="content">
+            <div class="cadastrar_btn">
+                <a class="nome-pagina">Usuários</a>
+                <a href="{% url 'cadastrar_usuario' %}" class="btn_cadastrar">Adicionar Usuario</a>
+            </div>
+
+            <div class = 'all-content'>
+
+                <div class="lista">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Email</th>
+                                <th>Usuário</th>
+                                <th>Grupo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for usuario in usuarios %}
+                                <tr>
+                                    <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                                    <td>{{ usuario.email }}</td>
+                                    <td>{{ usuario.username }}</td>
+                                    <td>{{ usuario.groups.all.0 }}</td>
+                                    {% if usuario.is_active %}
+                                        <td>Ativo</td>
+                                    {% else %}
+                                        <td>Inativo</td>
+                                    {% endif %}
+                                    <td class="align-right">
+                                      <div class="btn-action-container">
+                                        <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                        <button class="btn-action btn-deletar" data-id="{{ usuario.id }}" data-url="{% url 'desativar_usuario' usuario.id %}"><i class="fa fa-trash"></i></button>
+                                      </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include "utils/paginador.html" %}
+                    {% include "utils/duvidas.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/deletar.js' %}"></script>
+</body>
+{% endblock %}
