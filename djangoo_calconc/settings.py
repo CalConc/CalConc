@@ -33,6 +33,9 @@ else:
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://calconc-production.up.railway.app'
+]
 
 # Application definition
 
