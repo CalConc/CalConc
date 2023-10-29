@@ -2,7 +2,7 @@ asgiref==3.7.2
 dj-database-url==2.1.0
 Django==4.2.5
 gunicorn==21.2.0
-numpy==1.25.2
+numpy
 packaging==23.2
 Pillow==10.0.0
 reportlab==4.0.4
