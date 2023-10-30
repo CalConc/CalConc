@@ -6,9 +6,6 @@ project = 'CalConc'
 copyright = ''
 author = ''
 
-release = '0.1'
-version = '0.1.0'
-
 # -- General configuration
 
 extensions = [
@@ -17,6 +14,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
+    'sphinx_copybutton'
 ]
 
 intersphinx_mapping = {
@@ -30,6 +28,8 @@ templates_path = ['_templates']
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
+# html_theme = 'press'
+
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
