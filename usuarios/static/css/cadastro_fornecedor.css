@@ -93,10 +93,14 @@ h2{
     margin-top: 20px;
 }
 
+.field.descricao input {
+    height: 200px;
+}
+
 .field {
     margin-left: 2%;
     margin-bottom: 20px;
-    width: 50%;
+    width: 90%;
 
 }
 
@@ -106,7 +110,6 @@ h2{
     margin-bottom: 5px;
     display: block;
     font-weight: bold;
-
 }
 
 .field input,
@@ -160,7 +163,4 @@ h2{
 .exit-button {
     background-color: red;
     color: white;
-}
-.field.descricao input {
-    height: 130px;
 }
