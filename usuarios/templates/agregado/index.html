@@ -57,7 +57,9 @@
                         </tbody>
                     </table>
                     {% include "utils/paginador.html" %}
-                    {% include "utils/duvidas.html" %}
+                    {% with duvidas_link='https://www.google.com.br' %}
+                        {% include "utils/duvidas.html" %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

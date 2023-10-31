@@ -26,14 +26,14 @@
                 <ul class="error-message">{{ form.nome.errors }}</ul>
             </div>
             <div class="field">
-                <label for="{{ form.descricao.id_for_label }}">Descrição</label>
-                {{ form.descricao }}
-                <ul class="error-message">{{ form.descricao.errors }}</ul>
-            </div>
-            <div class="field">
                 <label for="{{ form.porcentagem_agua.id_for_label }}">Porcentagem de água<span class="required-label">*</span></label>
                 {{ form.porcentagem_agua }}
                 <ul class="error-message">{{ form.porcentagem_agua.errors }}</ul>
+            </div>
+            <div class="field descricao">
+                <label for="{{ form.descricao.id_for_label }}">Descrição</label>
+                {{ form.descricao }}
+                <ul class="error-message">{{ form.descricao.errors }}</ul>
             </div>
         </div>
     </div>
