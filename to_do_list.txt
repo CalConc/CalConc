@@ -5,7 +5,10 @@ Lista de afazeres:
 - Melhorar interfaces de cadastro, principalmente forncedor (ccs)
 - Padronizar html/css de 'utils/404.html'                   (testar)
 - Padronizar html/css de 'utils/500.html'                   (testar)
-- Fazer logica para desativar/ativar usuário
+- fazer css de cadastro/edição de agregados não precisar de scrool, para isso deve-se deixar campos um do lado do outro (como fone, cep, ...)
+- Criar sub tab de usuários para usuários desativados
+    - usuários ativos devem aparecer na tab que já exiaste e deve existir apenas o icone para desativar usuários
+    - usuários desativados devem aparecer na nova sub tab 'usuários desativados', e deve haver um botão para reativar os usuários
 
 - Adicionar cadastro de usuários                            (feito)
 - Adicionar permissões de usuarios                          (feito)
