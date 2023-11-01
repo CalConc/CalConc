@@ -91,7 +91,9 @@
 
     {% include "utils/salvar_cancelar_botoes.html" %}
   </form>
-{% include "utils/duvidas.html" %}
+    {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/usuarios/main.html' %}
+        {% include "utils/duvidas.html" %}
+    {% endwith %}
 </body>
 </html>
 {% endblock %}

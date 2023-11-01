@@ -58,7 +58,9 @@
                         </tbody>
                     </table>
                     {% include "utils/paginador.html" %}
-                    {% include "utils/duvidas.html" %}
+                    {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/traco/main.html' %}
+                        {% include "utils/duvidas.html" %}
+                    {% endwith %}
                 </div>
             </div>
         </div>

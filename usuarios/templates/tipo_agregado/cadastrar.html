@@ -24,7 +24,9 @@
     </div>
 
     {% include "utils/salvar_cancelar_botoes.html" %}
-      {% include "utils/duvidas.html" %}
+        {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/tipo_de_agregado/adicionar.html' %}
+            {% include "utils/duvidas.html" %}
+        {% endwith %}
   </form>
 <script>
     function goBack() {

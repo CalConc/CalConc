@@ -60,7 +60,9 @@
     {% endfor %}
 
     {% include "utils/salvar_cancelar_botoes.html" %}
-    {% include "utils/duvidas.html" %}
+    {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/traco/adicionar.html' %}
+        {% include "utils/duvidas.html" %}
+    {% endwith %}
 </form>
 </body>
 </html>

@@ -58,7 +58,9 @@
                     </table>
                 </div>
             </div>
-            {% include "utils/duvidas.html" %}
+            {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/usuarios/visualizar.html' %}
+                {% include "utils/duvidas.html" %}
+            {% endwith %}
         </div>
     </div>
 </body>

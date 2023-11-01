@@ -80,7 +80,9 @@
             </div>
         </div>
     </div>
-    {% include "utils/duvidas.html" %}
+    {% with duvidas_link='https://calconc.readthedocs.io/pt/latest/files/historico/visualizar.html' %}
+        {% include "utils/duvidas.html" %}
+    {% endwith %}
     {% endif %}
 </div>
 </div>
