@@ -34,9 +34,12 @@ A tela de adição de agregado permite o preenchimento dos seguintes campos:
 
         Descrição: Fornecedor do agregado, Deve ser selecionado um fornecedor já cadastrado
 
-    Granulometria
+    **Granulometria**
 
-            Descrição: Os campos de granulometria são referentes ao processo de medição de granulometria do agregado. Cada campo representa uma peneira, e o campo 'Fundo' representa o ultimo coletor da sequência.
+
+        Os campos de granulometria são referentes ao processo de medição de granulometria do agregado.
+
+        Cada campo representa uma peneira, e o campo 'Fundo' representa o ultimo coletor da sequência.
 
         - Pen 6.30 mm
             Tipo: Obrigatório
