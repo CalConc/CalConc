@@ -1,42 +1,55 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView
-from .forms import FornecedorForms, TipoAgregadoForms, AgregadoForms, TracoForms, TracoAgregadoForms, \
-    CustomUsuarioCreateForm, CustomUsuarioChangeForm
-from .models import Fornecedor, TipoAgregado, Agregado, Traco, TracoAgregado, CalculoTraco, CustomUsuario, \
-    AgregadosCalculo
-from django.utils import timezone
-from django.db.models import F
 from datetime import datetime
-from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.decorators import method_decorator
-from django.contrib import messages
-from .scripts import GetInformacoesAgregados, InsertTraco, CalcularTraco, get_last_agregado, resolve_unidade_medida, get_user_group
-from reportlab.pdfgen import canvas
-from reportlab.lib.styles import getSampleStyleSheet
+import os
+from io import BytesIO
+
 from django import forms
-from textwrap import wrap
-from django.core.paginator import Paginator
-from django.db.models.functions import Lower
-from django.shortcuts import render
-from .decorators import allowed_users
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from .apps import default_calconc_users
+from django.core.paginator import Paginator
+from django.db.models import F, functions
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
+
+from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from io import BytesIO
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Table, TableStyle
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from io import BytesIO
-from django.http import HttpResponse
-from datetime import datetime
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+
+from .decorators import allowed_users
+from .forms import (
+    FornecedorForms,
+    TipoAgregadoForms,
+    AgregadoForms,
+    TracoForms,
+    TracoAgregadoForms,
+    CustomUsuarioCreateForm,
+    CustomUsuarioChangeForm,
+)
+from .models import (
+    Fornecedor,
+    TipoAgregado,
+    Agregado,
+    Traco,
+    TracoAgregado,
+    CalculoTraco,
+    CustomUsuario,
+    AgregadosCalculo,
+)
+from .scripts import (
+    GetInformacoesAgregados,
+    InsertTraco,
+    CalcularTraco,
+    get_last_agregado,
+    resolve_unidade_medida,
+    get_user_group,
+)
 
 
 itens_por_pagina = 8
@@ -708,31 +721,44 @@ def download_pdf(request, calculo_traco_id):
     traco = CalculoTraco.objects.get(id=calculo_traco_id)
     agregados_calculo = AgregadosCalculo.objects.filter(fk_calculo_traco=traco)
     _, unidade_medida_display = resolve_unidade_medida(calculo_traco.unidade_medida)
-    data_hora = calculo_traco.data_hora
-    data_hora_formatado = f"{data_hora.hour}:{data_hora.minute} - {data_hora.day}/{data_hora.month}/{data_hora.year}"
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="relatorio.pdf'
 
     # Calculate the vertical center position
     vertical_center = (letter[1] - doc.topMargin - doc.bottomMargin) / 2
 
+    # Construa o caminho completo para a imagem no sistema de arquivos do servidor
+    image_path = os.path.join(settings.STATIC_ROOT, "images", "img-01.png")
+
+    # Adicione a imagem ao PDF
+    if os.path.exists(image_path):
+        image = Image(image_path, width=20, height=20)
+        story.append(image)
+    else:
+        print('nao deu')
+        pass
+
     # Add a title
     title = "Relatório do Traço"
 
     story.append(Paragraph(title, styles['Title']))
+    # Adicione Traço information em negrito
+    traço_label = "Traço"
+    traço_valor = traco.fk_traco.nome
+    story.append(Paragraph(f"<b>{traço_label.upper()} {traço_valor.upper()}</b>", custom_style_center))
     story.append(Paragraph("_______________________________________________________________________________", custom_style))
 
-    # Add Traço information
-    user_name = f"Usuário: {traco.fk_usuario.first_name} {traco.fk_usuario.last_name}"
-    story.append(Paragraph(user_name, custom_style_center))
+    # Add Traço information com o nome do usuário em letras maiúsculas
+    user_name = f"<b>Usuário:</b> {traco.fk_usuario.first_name.capitalize()} {traco.fk_usuario.last_name.capitalize()}"
+    story.append(Paragraph(user_name, custom_style))
 
-    # Add Traço information
-    story.append(Paragraph(f"Traço: {traco.fk_traco.nome}", custom_style))
-    description = "Descrição do traço: " + traco.fk_traco.descricao
-    story.append(Spacer(1, 12))
-    story.append(Paragraph(description, custom_style))
-    story.append(Paragraph(f"Volume do Traço: {traco.volume} {unidade_medida_display}", custom_style))
-    story.append(Paragraph(f"Peso Final: {traco.peso_final} Kg", custom_style))
+    # Adicione a Descrição do traço em negrito
+    description = traco.fk_traco.descricao
+    descricao_label = "Descrição do traço:"
+    story.append(Paragraph(f"<b>{descricao_label}</b> {description}", custom_style))
+
+    story.append(Paragraph(f"<b>Volume do Traço: </b>{traco.volume} {unidade_medida_display}", custom_style))
+    story.append(Paragraph(f"<b>Peso Final:</b> {traco.peso_final} Kg", custom_style))
 
     story.append(Spacer(1, 24))
 
@@ -760,7 +786,7 @@ def download_pdf(request, calculo_traco_id):
     story.append(table)
 
     data_hora = datetime.now().strftime("%H:%M - %d/%m/%Y")
-    footer_text = f"Data e hora: {data_hora}"
+    footer_text = f"{data_hora}"
 
     create_pdf_with_footer(buffer, story, footer_text)
 
@@ -769,43 +795,6 @@ def download_pdf(request, calculo_traco_id):
     response['Content-Disposition'] = 'attachment; filename="relatorio.pdf"'
     response.write(buffer.read())
     return response
-
-
-@login_required
-@allowed_users(allowed_roles=['Administrador'])
-def listar_usuarios(request):
-    usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
-    context = {
-        'usuarios': usuarios,
-        'user_group': get_user_group(request)
-    }
-    return render(request, 'registration/index_usuario.html', context)
-
-
-@login_required
-@allowed_users(allowed_roles=['Administrador'])
-def cadastrar_usuarios(request):
-    if request.method == 'POST':
-        if "cancel" in request.POST:
-            return redirect('usuarios')
-        form = CustomUsuarioCreateForm(request.POST)
-        group_name = request.POST.get('group')
-        if form.is_valid():
-            user = form.save()
-            group = Group.objects.get(name=group_name)
-            user.groups.add(group)
-            return redirect('usuarios')
-
-    else:
-        form = CustomUsuarioCreateForm()
-
-    context = {
-        'form': form,
-        'groups': default_calconc_users,
-        'user_group': get_user_group(request)
-    }
-    return render(request, 'registration/cadastrar_usuario.html', context)
-
 
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
