@@ -894,5 +894,41 @@ def desativar_usuario(request, pk):
     return listar_usuarios(request)
 
 
+
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
+def listar_usuarios(request):
+    usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
+    context = {
+        'usuarios': usuarios,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'registration/index_usuario.html', context)
+
+
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
+def cadastrar_usuarios(request):
+    if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('usuarios')
+        form = CustomUsuarioCreateForm(request.POST)
+        group_name = request.POST.get('group')
+        if form.is_valid():
+            user = form.save()
+            group = Group.objects.get(name=group_name)
+            user.groups.add(group)
+            return redirect('usuarios')
+
+    else:
+        form = CustomUsuarioCreateForm()
+
+    context = {
+        'form': form,
+        'groups': default_calconc_users,
+        'user_group': get_user_group(request)
+    }
+    return render(request, 'registration/cadastrar_usuario.html', context)
+
 def error_page(request):
     return render(request, 'utils/erro_autorizacao.html')
