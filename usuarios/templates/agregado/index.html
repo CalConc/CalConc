@@ -40,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for agregado in agregados %}
+                            {% for agregado in page_obj %}
                                 <tr>
                                     <td>{{ agregado.nome }}</td>
                                     <td>{{ agregado.fk_tipo_agregado_id }}</td>

@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for calculo in historico %}
+                {% for calculo in page_obj %}
                 <tr>
                     <td>{{ calculo.fk_traco }}</td>
                     <td>{{ calculo.fk_usuario.nome }}</td>

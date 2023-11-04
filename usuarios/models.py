@@ -122,7 +122,7 @@ class Agregado(models.Model):
 
 
 class Traco(models.Model):
-    nome = models.CharField(max_length=20, unique=True)
+    nome = models.CharField(max_length=50, unique=True)
     descricao = models.CharField(max_length=250, blank=True)
     porcentagem_agua = models.FloatField()
     agregados = models.ManyToManyField(Agregado, through='TracoAgregado', blank=True)

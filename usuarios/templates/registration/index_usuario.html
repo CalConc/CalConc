@@ -39,7 +39,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for usuario in usuarios %}
+                            {% for usuario in page_obj %}
                                 <tr>
                                     <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
                                     <td>{{ usuario.email }}</td>

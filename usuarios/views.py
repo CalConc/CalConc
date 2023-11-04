@@ -54,7 +54,8 @@ from .scripts import (
 )
 
 
-itens_por_pagina = 8
+# todo isso deve ser dinamico, ou a pessoa deve selecionar
+itens_por_pagina = 5
 
 
 def custom_404(request, exception):
@@ -77,11 +78,15 @@ def index(request):
 @allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def listar_historico(request):
     historico = CalculoTraco.objects.all()
+    paginator = Paginator(historico, itens_por_pagina)
+
+    page_number = request.GET.get("page")
 
     exibir_data = True
 
     context = {
         'historico': historico,
+        'page_obj': paginator.get_page(page_number),
         'exibir_data': exibir_data,
         'user_group': get_user_group(request)
     }
@@ -164,7 +169,7 @@ def calculadora(request):
 def listar_tipo_agregado(request):
     tipos_agregados = TipoAgregado.objects.all().order_by(Lower('nome'))
     exibir_data = False
-    paginator = Paginator(tipos_agregados, 6)
+    paginator = Paginator(tipos_agregados, itens_por_pagina)
 
     page_number = request.GET.get("page")
     context = {
@@ -240,9 +245,13 @@ def deletar_tipo_agregado(request, pk):
 @allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_agregados(request):  # Renomeei a função para ser mais descritiva
     agregados = Agregado.objects.all().order_by(Lower('nome'))
+    paginator = Paginator(agregados, itens_por_pagina)
+
+    page_number = request.GET.get("page")
+
     exibir_data = False
     context = {
-        'agregados': agregados,
+        'page_obj': paginator.get_page(page_number),
         'exibir_data': exibir_data,
         'user_group': get_user_group(request)
         }
@@ -341,9 +350,13 @@ def deletar_agregado(request, pk):
 @allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_fornecedor(request):
     fornecedores = Fornecedor.objects.all().order_by(Lower('nome'))
+    paginator = Paginator(fornecedores, itens_por_pagina)
+
+    page_number = request.GET.get("page")
+
     exibir_data = False
     context = {
-        'fornecedores': fornecedores,
+        'page_obj': paginator.get_page(page_number),
         'exibir_data': exibir_data,
         'user_group': get_user_group(request)
     }
@@ -421,10 +434,15 @@ def editar_fornecedor(request, pk):
 @allowed_users(allowed_roles=['Administrador', 'Editor'])
 def listar_traco(request):  # Renomeei a função para ser mais descritiva
     traco = Traco.objects.all().order_by(Lower('nome'))
+    paginator = Paginator(traco, itens_por_pagina)
+
+    page_number = request.GET.get("page")
+
     exibir_data = True
     context = {
         'traco': traco,
         'exibir_data': exibir_data,
+        'page_obj': paginator.get_page(page_number),
         'user_group': get_user_group(request)
     }
     return render(request, 'traco/index.html', context)
@@ -499,6 +517,12 @@ def editar_traco(request, pk):
     agregados_traco = TracoAgregado.objects.filter(traco=traco)
     tipos_agregado = TipoAgregado.objects.all()
 
+    context = {
+        'traco': traco,
+        'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
+        'user_group': get_user_group(request)
+    }
+
     if request.method == 'POST':
         if "cancel" in request.POST:
             return redirect('traco')
@@ -506,12 +530,8 @@ def editar_traco(request, pk):
         agregados = request.POST.getlist('agregados')
         porcentagem_agregados = request.POST.getlist('porcentagem_agregados')
 
-        context = {
-            'form': form,
-            'traco': traco,
-            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
-            'user_group': get_user_group(request)
-        }
+
+        context['form'] = form
 
         if form.is_valid() and (agregados is not None) and (porcentagem_agregados is not None):
             return InsertTraco(request, context, agregados, porcentagem_agregados, render_file='traco/editar.html')
@@ -524,12 +544,8 @@ def editar_traco(request, pk):
     else:
         form = TracoForms(instance=traco)
 
-        context = {
-            'form': form,
-            'traco': traco,
-            'informacoes_agregados': GetInformacoesAgregados(agregados_traco, tipos_agregado),
-            'user_group': get_user_group(request)
-        }
+
+        context['form'] = form
 
         return render(request, 'traco/editar.html', context)
 
@@ -901,8 +917,13 @@ def desativar_usuario(request, pk):
 @allowed_users(allowed_roles=['Administrador'])
 def listar_usuarios(request):
     usuarios = CustomUsuario.objects.all().order_by(Lower('username'))
+    paginator = Paginator(usuarios, itens_por_pagina)
+
+    page_number = request.GET.get("page")
+
     context = {
         'usuarios': usuarios,
+        'page_obj': paginator.get_page(page_number),
         'user_group': get_user_group(request)
     }
     return render(request, 'registration/index_usuario.html', context)
