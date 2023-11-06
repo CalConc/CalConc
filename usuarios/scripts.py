@@ -14,13 +14,12 @@ import math
 
 def GetInformacoesAgregados(agregados_traco, tipos_agregado):
     porcentagem_agregados = []
+    value = ''
     for tipo_agregado in tipos_agregado:
         for agregado_traco in agregados_traco:
             if agregado_traco.agregado.fk_tipo_agregado_id == tipo_agregado:
                 value = agregado_traco.porcentagem
                 break
-            else:
-                value = ''
         porcentagem_agregados.append(value)
 
     informacoes_agregados = []
