@@ -69,10 +69,17 @@ def custom_500(request):
 @login_required
 @allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
 def index(request):
-    context = {
-        'user_group': get_user_group(request)
-    }
-    return render(request, 'index.html', context)
+    is_admin = request.user.is_superuser
+    if is_admin:
+        context = {
+            'user_group': get_user_group(request)
+        }
+        return render(request, 'index.html', context)
+    else:
+        context = {
+            'user_group': get_user_group(request)
+        }
+        return render(request, 'index_editor.html', context)
 
 @login_required
 @allowed_users(allowed_roles=['Administrador', 'Consultor', 'Editor'])
