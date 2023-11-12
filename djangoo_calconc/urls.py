@@ -46,6 +46,7 @@ urlpatterns = [
     path('inspecionar_usuario/<int:pk>/', views.inspecionar_usuario, name='inspecionar_usuario'),
     path('editar_usuario/<int:pk>/', views.editar_usuario, name='editar_usuario'),
     path('desativar_usuario/<int:pk>/', views.desativar_usuario, name='desativar_usuario'),
+    path('ativar_usuario/<int:pk>/', views.ativar_usuario, name='ativar_usuario'),
 
     ### Agregados
     path('agregados/', views.listar_agregados, name='agregados'),

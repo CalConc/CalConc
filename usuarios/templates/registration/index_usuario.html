@@ -51,11 +51,17 @@
                                         <td>Inativo</td>
                                     {% endif %}
                                     <td class="align-right">
-                                      <div class="btn-action-container">
-                                        <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
-                                        <a href="{% url 'editar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
-                                        <button class="btn-action btn-deletar" data-id="{{ usuario.id }}" data-url="{% url 'desativar_usuario' usuario.id %}"><i class="fa fa-trash"></i></button>
-                                      </div>
+                                        <div class="btn-action-container">
+                                            <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
+                                            <a href="{% url 'editar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
+                                            {% if usuario.is_active %}
+                                            <button class="btn-action btn-inativar" data-id="{{ usuario.id }}"
+                                                data-url="{% url 'desativar_usuario' usuario.id %}"><i class="fas fa-times-circle"></i></button>
+                                            {% else %}
+                                            <button class="btn-action btn-ativar" data-id="{{ usuario.id }}"
+                                                data-url="{% url 'ativar_usuario' usuario.id %}"><i class="fas fa-check-circle"></i></button>
+                                            {% endif %}
+                                        </div>
                                     </td>
                                 </tr>
                             {% endfor %}

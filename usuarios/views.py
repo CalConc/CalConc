@@ -918,7 +918,14 @@ def desativar_usuario(request, pk):
 
     return listar_usuarios(request)
 
+@login_required
+@allowed_users(allowed_roles=['Administrador'])
+def ativar_usuario(request, pk):
+    usuario = get_object_or_404(CustomUsuario, id=pk)
+    usuario.is_active = True
+    usuario.save()
 
+    return listar_usuarios(request)
 
 @login_required
 @allowed_users(allowed_roles=['Administrador'])
