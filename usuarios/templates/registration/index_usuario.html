@@ -55,11 +55,9 @@
                                             <a href="{% url 'inspecionar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-eye"></i></a>
                                             <a href="{% url 'editar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-edit"></i></a>
                                             {% if usuario.is_active %}
-                                            <button class="btn-action btn-inativar" data-id="{{ usuario.id }}"
-                                                data-url="{% url 'desativar_usuario' usuario.id %}"><i class="fas fa-times-circle"></i></button>
-                                            {% else %}
-                                            <button class="btn-action btn-ativar" data-id="{{ usuario.id }}"
-                                                data-url="{% url 'ativar_usuario' usuario.id %}"><i class="fas fa-check-circle"></i></button>
+                                            <a href="{% url 'desativar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-times-circle"></i></a>
+                                             {% else %}
+                                            <a href="{% url 'ativar_usuario' usuario.id %}" class="btn-action"><i class="fa fa-check-circle"></i></a>
                                             {% endif %}
                                         </div>
                                     </td>
