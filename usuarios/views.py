@@ -793,7 +793,7 @@ def download_pdf(request, calculo_traco_id):
         data.append([agregado.tipo_agregado, agregado.nome, f"{agregado.quantidade} {agregado.unidade_medida}"])
 
     # Defina uma lista de larguras de coluna desejadas
-    column_widths = [100, 200, 200, 500]
+    column_widths = [170, 260, 110]
 
     # Crie a tabela com os dados
     table = Table(data, colWidths=column_widths)
